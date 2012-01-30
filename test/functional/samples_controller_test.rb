@@ -2,7 +2,7 @@ require 'test_helper'
 
 class SamplesControllerTest < ActionController::TestCase
   setup do
-    @sample = samples(:one)
+    @sample = samples(:sample1)
   end
 
   test "should get index" do

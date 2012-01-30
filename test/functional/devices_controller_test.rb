@@ -2,7 +2,7 @@ require 'test_helper'
 
 class DevicesControllerTest < ActionController::TestCase
   setup do
-    @device = devices(:one)
+    @device = devices(:dev1)
   end
 
   test "should get index" do
@@ -18,7 +18,7 @@ class DevicesControllerTest < ActionController::TestCase
 
   test "should create device" do
     assert_difference('Device.count') do
-      post :create, :device => @device.attributes
+      post :create, :device => { :description => 'new-dev' }
     end
 
     assert_redirected_to device_path(assigns(:device))

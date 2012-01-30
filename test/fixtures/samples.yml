@@ -1,13 +1,15 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/Fixtures.html
 
-one:
+sample1:
+  device: dev1
   sample_time: 2012-01-30 10:25:56
   device_time: 2012-01-30 10:25:56
-  power: 1
-  temperature: 9.99
+  power: 620
+  temperature: 21.7
 
-two:
-  sample_time: 2012-01-30 10:25:56
-  device_time: 2012-01-30 10:25:56
-  power: 1
-  temperature: 9.99
+sample2:
+  device: dev1
+  sample_time: 2012-01-30 10:26:56
+  device_time: 2012-01-30 10:26:56
+  power: 590
+  temperature: 22.3
