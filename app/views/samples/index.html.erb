@@ -1,0 +1,29 @@
+<h1>Listing samples</h1>
+
+<table>
+  <tr>
+    <th>Sample time</th>
+    <th>Device time</th>
+    <th>Power</th>
+    <th>Temperature</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @samples.each do |sample| %>
+  <tr>
+    <td><%= sample.sample_time %></td>
+    <td><%= sample.device_time %></td>
+    <td><%= sample.power %></td>
+    <td><%= sample.temperature %></td>
+    <td><%= link_to 'Show', sample %></td>
+    <td><%= link_to 'Edit', edit_sample_path(sample) %></td>
+    <td><%= link_to 'Destroy', sample, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Sample', new_sample_path %>
