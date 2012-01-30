@@ -3,6 +3,7 @@
 <table>
   <tr>
     <th>Description</th>
+    <th>Upload Code</th>
     <th></th>
     <th></th>
     <th></th>
@@ -11,6 +12,7 @@
 <% @devices.each do |device| %>
   <tr>
     <td><%= device.description %></td>
+    <td><%= device.upload_code %></td>
     <td><%= link_to 'Show', device %></td>
     <td><%= link_to 'Edit', edit_device_path(device) %></td>
     <td><%= link_to 'Destroy', device, :confirm => 'Are you sure?', :method => :delete %></td>
