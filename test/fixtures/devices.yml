@@ -2,6 +2,8 @@
 
 dev1:
   description: Test device \#1
+  upload_code: <%= UUID.new.generate(:compact) %>
 
 dev2:
   description: Test device \#2
+  upload_code: <%= UUID.new.generate(:compact) %>

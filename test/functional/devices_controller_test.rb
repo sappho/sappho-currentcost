@@ -18,7 +18,7 @@ class DevicesControllerTest < ActionController::TestCase
 
   test "should create device" do
     assert_difference('Device.count') do
-      post :create, :device => { :description => 'new-dev' }
+      post :create, :device => { :description => 'new-dev', :upload_code => UUID.new.generate(:compact) }
     end
 
     assert_redirected_to device_path(assigns(:device))
