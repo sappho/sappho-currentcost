@@ -12,6 +12,10 @@
   <% end %>
 
   <div class="field">
+    <%= f.label :device_id %><br />
+    <%= f.number_field :device_id %>
+  </div>
+  <div class="field">
     <%= f.label :sample_time %><br />
     <%= f.datetime_select :sample_time %>
   </div>
