@@ -7,7 +7,9 @@ port.read_timeout = 1000
 buffer = ''
 loop do
   begin
+    puts 'wait'
     buffer += port.read(1)
+    puts buffer
     if buffer =~ /(<msg>(.+?)<.msg>)/im
       puts $1
       buffer = ''
