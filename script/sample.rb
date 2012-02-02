@@ -14,14 +14,18 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
         timestamp = Time.now
         devtimestamp = Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i)
         puts "reading: #{$1} #{timestamp}  temp(c) #{$5}  power(w) #{$6}"
-        RestClient.post "#{ARGV[2]}/sample/create", {
-            'updatecode' => ARGV[3],
-            'timestamp' => timestamp,
-            'devtimestamp' => Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i),
-            'temperature' => $5.to_d,
-            'power' => $6.to_i
-        }.to_json, :content_type => :json, :accept => :json do |response, request, result|
-          puts response
+        begin
+          RestClient.post "#{ARGV[2]}/sample/create", {
+              'updatecode' => ARGV[3],
+              'timestamp' => timestamp,
+              'devtimestamp' => Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i),
+              'temperature' => $5.to_d,
+              'power' => $6.to_i
+          }.to_json, :content_type => :json, :accept => :json do |response, request, result|
+            puts response
+          end
+        rescue Exception => ex
+          puts ex
         end
       end
     rescue
