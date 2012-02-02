@@ -8,7 +8,7 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   loop do
     begin
       buffer += port.read
-      if buffer =~ /(<msg><src>(.+?)<\/src>.*?<time>(\d\d\:\d\d\:\d\d)<\/time><tmpr>0{0,1}(\d{1,2}\.\d)<\/tmpr>.*?<watts>0{0,4}(\d{1,5})<\/watts>.*?<\/msg>)/im
+      if buffer =~ /<msg><src>(.+?)<\/src>.*?<time>(\d\d\:\d\d\:\d\d)<\/time><tmpr>0{0,1}(\d{1,2}\.\d)<\/tmpr>.*?<watts>0{0,4}(\d{1,5})<\/watts>.*?<\/msg>/im
         puts "reading = #{$1} #{$2} #{$3} #{$4}"
         buffer = ''
       end
