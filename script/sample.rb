@@ -7,7 +7,7 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   buffer = ''
   loop do
     begin
-      buffer += port.read(1)
+      buffer += port.read
       puts buffer
       if buffer =~ /(<msg>(.+?)<.msg>)/im
         puts $1
