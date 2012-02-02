@@ -19,7 +19,7 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
               'updatecode' => ARGV[3],
               'timestamp' => timestamp,
               'devtimestamp' => Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i),
-              'temperature' => $5.to_d,
+              'temperature' => Float($5),
               'power' => $6.to_i
           }.to_json, :content_type => :json, :accept => :json do |response, request, result|
             puts response
