@@ -7,6 +7,9 @@ logger = Logger.new STDOUT
 logger.level = Logger::INFO
 logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
 
+url = ARGV[2]
+updatecode = ARGV[3]
+
 SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   port.read_timeout = 100
   port.flow_control = SerialPort::NONE
@@ -20,8 +23,8 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
         devtimestamp = Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i)
         logger.info "reading: #{$1} #{timestamp}  temp(c) #{$5}  power(w) #{$6}"
         begin
-          RestClient.post "#{ARGV[2]}/sample/create",
-              'updatecode' => ARGV[3],
+          RestClient.post "#{url}/sample/create",
+              'updatecode' => updatecode,
               'timestamp' => timestamp,
               'devtimestamp' => Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i),
               'temperature' => Float($5),
@@ -31,7 +34,7 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
         end
       end
     rescue
-      # at the moment we don't care when nothing comes into the port - keep on looking
+      put "."
     end
   end
 end
