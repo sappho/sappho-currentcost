@@ -17,14 +17,13 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   loop do
     buffer += port.read
     if buffer =~ /<msg><src>(.+?)<\/src>.*?<time>0{0,1}(\d{1,2})\:0{0,1}(\d{1,2})\:0{0,1}(\d{1,2})<\/time><tmpr>0{0,1}(\d{1,2}\.\d)<\/tmpr>.*?<watts>0{0,4}(\d{1,5})<\/watts>.*?<\/msg>/im
-      buffer = ''
       timestamp = Time.now
-      logger.info "reading: #{$1} #{timestamp}  temp(c) #{$5}  power(w) #{$6}"
+      buffer = ''
+      logger.info "reading: #{$1}  #{timestamp}  temp(c) #{$5}  power(w) #{$6}"
       begin
         RestClient.post "#{url}/sample/create",
             'updatecode' => updatecode,
             'timestamp' => timestamp,
-            'devtimestamp' => Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i),
             'temperature' => Float($5),
             'power' => $6.to_i
       rescue Exception => ex
