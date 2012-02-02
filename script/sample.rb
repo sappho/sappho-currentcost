@@ -1,6 +1,11 @@
 require 'rubygems'
 require 'serialport'
 require 'rest_client'
+require 'logger'
+
+logger = Logger.new STDOUT
+logger.level = Logger::INFO
+logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
 
 SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   port.read_timeout = 100
@@ -13,18 +18,16 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
         buffer = ''
         timestamp = Time.now
         devtimestamp = Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i)
-        puts "reading: #{$1} #{timestamp}  temp(c) #{$5}  power(w) #{$6}"
+        logger.info "reading: #{$1} #{timestamp}  temp(c) #{$5}  power(w) #{$6}"
         begin
           RestClient.post "#{ARGV[2]}/sample/create",
               'updatecode' => ARGV[3],
               'timestamp' => timestamp,
               'devtimestamp' => Time.local(timestamp.year, timestamp.month, timestamp.day, $2.to_i, $3.to_i, $4.to_i),
               'temperature' => Float($5),
-              'power' => $6.to_i do |response, request, result|
-            puts response
-          end
+              'power' => $6.to_i
         rescue Exception => ex
-          puts ex
+          logger.error ex
         end
       end
     rescue
