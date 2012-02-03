@@ -8,7 +8,7 @@ logger.level = Logger::INFO
 logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
 
 url = ARGV[2]
-updatecode = ARGV[3]
+upload_code = ARGV[3]
 
 SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   port.read_timeout = 100
@@ -17,15 +17,15 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
   loop do
     buffer += port.read
     if buffer =~ /<msg>.*?<tmpr>0{0,1}(\d{1,2}\.\d)<\/tmpr>.*?<watts>0{0,4}(\d{1,5})<\/watts>.*?<\/msg>/im
-      timestamp = Time.now
+      sample_time = Time.now
       buffer = ''
-      logger.info "reading: #{timestamp}  temp(c) #{$1}  power(w) #{$2}"
+      logger.info "reading: #{sample_time}  temp(c) #{$1}  power(w) #{$2}"
       begin
         RestClient.post "#{url}/samples",
-            'updatecode' => updatecode,
-            'timestamp' => timestamp,
-            'temperature' => Float($1),
-            'power' => $2.to_i
+            :upload_code => upload_code,
+            :sample_time => sample_time,
+            :temperature => Float($1),
+            :power => Integer($2)
       rescue Exception => ex
         logger.error ex
       end
