@@ -21,7 +21,7 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
       buffer = ''
       logger.info "reading: #{timestamp}  temp(c) #{$1}  power(w) #{$2}"
       begin
-        RestClient.post "#{url}/sample/create",
+        RestClient.post "#{url}/samples",
             'updatecode' => updatecode,
             'timestamp' => timestamp,
             'temperature' => Float($1),
