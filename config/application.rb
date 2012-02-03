@@ -55,5 +55,8 @@ module SapphoCurrentCost
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Administration password hash
+    config.admin_password_hash = Digest::SHA1.hexdigest 'testing123'
   end
 end

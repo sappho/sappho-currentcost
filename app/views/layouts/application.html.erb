@@ -7,6 +7,20 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+<div id='user_panel'>
+  <% unless session[:loggedIn] %>
+    <%= form_tag '/administrator/login' do -%>
+      <%= label_tag 'password' %>
+      <%= text_field_tag 'password' %>
+      <%= submit_tag 'Login' %>
+    <% end -%>
+  <% else %>
+      <%= form_tag '/administrator/logout' do -%>
+        <%= label_tag 'You are logged in' %>
+        <%= submit_tag 'Logout' %>
+      <% end -%>
+  <% end %>
+</div>
 
 <%= yield %>
 

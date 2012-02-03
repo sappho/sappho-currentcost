@@ -1,4 +1,8 @@
 SapphoCurrentCost::Application.routes.draw do
+  post "administrator/login"
+
+  post "administrator/logout"
+
   get "presentation/index"
 
   resources :devices
