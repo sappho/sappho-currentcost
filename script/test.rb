@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'serialport'
 require 'rest_client'
 require 'logger'
 
