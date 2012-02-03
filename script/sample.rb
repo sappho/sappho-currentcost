@@ -19,9 +19,8 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
     if buffer =~ /<msg>.*?<tmpr>0{0,1}(\d{1,2}\.\d)<\/tmpr>.*?<watts>0{0,4}(\d{1,5})<\/watts>.*?<\/msg>/im
       sample_time = Time.now
       buffer = ''
-      logger.info "reading: #{sample_time}  temp(c) #{$1}  power(w) #{$2}"
       begin
-        RestClient.post "#{url}/samples", {:sample => {
+        logger.info RestClient.post "#{url}/samples", {:sample => {
             :upload_code => upload_code,
             :sample_time => sample_time,
             :temperature => Float($1),

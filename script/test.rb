@@ -8,8 +8,8 @@ logger.level = Logger::INFO
 logger.formatter = proc { |severity, datetime, progname, msg| "#{msg}\n" }
 
 begin
-  RestClient.post "http://localhost:3000/samples", {:sample => {
-      :upload_code => '12345x',
+  logger.info RestClient.post "http://localhost:3000/samples", {:sample => {
+      :upload_code => 'testing testing 123',
       :sample_time => Time.now,
       :temperature => Float('26.4'),
       :power => Integer('600') }}, {:content_type => :json, :accept => :json}
