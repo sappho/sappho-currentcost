@@ -21,11 +21,11 @@ SerialPort.open(ARGV[0], ARGV[1].to_i, 8, 1) do |port|
       buffer = ''
       logger.info "reading: #{sample_time}  temp(c) #{$1}  power(w) #{$2}"
       begin
-        RestClient.post "#{url}/samples",
+        RestClient.post "#{url}/samples", {:sample => {
             :upload_code => upload_code,
             :sample_time => sample_time,
             :temperature => Float($1),
-            :power => Integer($2)
+            :power => Integer($2) }}, {:content_type => :json, :accept => :json}
       rescue Exception => ex
         logger.error ex
       end
