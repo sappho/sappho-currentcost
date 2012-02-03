@@ -7,7 +7,7 @@ SapphoCurrentCost::Application.routes.draw do
 
   resources :devices
 
-  resources :samples
+  post "samples/create"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
