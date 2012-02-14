@@ -32,10 +32,10 @@ end
 
 cmd = makeReadCommand
 socket = TCPSocket.open('192.168.2.61', 8068)
-socket.puts cmd
+socket.print cmd
 begin
-  timeout(2000) do
-    reply = socket.gets(3)
+  timeout(5000) do
+    reply = socket.recv(3)
   end
   rescue
 end
