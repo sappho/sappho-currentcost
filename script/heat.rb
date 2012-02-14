@@ -31,7 +31,8 @@ def makeReadCommand slaveAddress = 0x01, masterAddress = 0x81
 end
 
 cmd = makeReadCommand
-socket = TCPSocket.open('192.168.2.61', 8068)
-socket.write cmd
-reply = socket.read 3
-reply.unpack('c*').each { |byte| puts byte }
+TCPSocket.open('192.168.2.61', 8068) do |socket|
+  socket.write cmd
+  reply = socket.read 3
+  reply.unpack('c*').each { |byte| puts byte }
+end
