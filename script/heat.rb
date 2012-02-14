@@ -33,11 +33,5 @@ end
 cmd = makeReadCommand
 socket = TCPSocket.open('192.168.2.61', 8068)
 socket.print cmd
-reply = ''
-begin
-  timeout(2) do
-    reply = socket.read(3)
-  end
-  rescue
-end
+reply = socket.read(3)
 reply.unpack('c*').each { |byte| puts byte }
