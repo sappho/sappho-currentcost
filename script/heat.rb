@@ -32,6 +32,6 @@ end
 
 cmd = makeReadCommand
 socket = TCPSocket.open('192.168.2.61', 8068)
-socket.print cmd
-reply = socket.read(3)
+socket.send cmd
+reply = socket.read 3
 reply.unpack('c*').each { |byte| puts byte }
