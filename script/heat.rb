@@ -34,7 +34,7 @@ cmd = makeReadCommand
 socket = TCPSocket.open('192.168.2.61', 8068)
 socket.print cmd
 begin
-  timeout(5000) do
+  timeout(2) do
     reply = socket.recv(3)
   end
   rescue
