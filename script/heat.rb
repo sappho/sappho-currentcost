@@ -37,22 +37,20 @@ class CRC
 
 end
 
-def makeReadCommand pin, address = 0x93
-  command = [address, 0x0B, 0x00, pin & 0xFF, pin >> 8, 0x00, 0x00, 0xFF, 0xFF]
+def makeReadCommand pin, function = 0x93
+  command = [function, 0x0B, 0x00, pin & 0xFF, pin >> 8, 0x00, 0x00, 0xFF, 0xFF]
   crc = CRC.new command
   command << crc.crcLo
   command << crc.crcHi
-  puts command
   command.pack 'c*'
 end
 
 def doComms pin
   cmd = makeReadCommand pin
-  TCPSocket.open('192.168.2.61', 8068) do |socket|
-    socket.write cmd
-    reply = socket.read 81
-    puts reply.unpack('c*')
-  end
+  socket = TCPSocket.open('192.168.2.61', 8068)
+  socket.write cmd
+  reply = socket.read 81
+  puts reply.unpack('c*')
 end
 
 doComms 4792
