@@ -2,37 +2,57 @@
 require 'socket'
 require 'timeout'
 
-CrcHash = [
-    0x0000, 0x1021, 0x2042, 0x3063,
-    0x4084, 0x50A5, 0x60C6, 0x70E7,
-    0x8108, 0x9129, 0xA14A, 0xB16B,
-    0xC18C, 0xD1AD, 0xE1CE, 0xF1EF
-]
+class CRC
 
-def buildCrcNibble crc, nibble
-  ((crc << 4) & 0xFFFF) ^ CrcHash[(crc >> 12) ^ nibble]
-end
+  LookupHi = [
+      0x00, 0x10, 0x20, 0x30, 0x40, 0x50, 0x60, 0x70,
+      0x81, 0x91, 0xA1, 0xB1, 0xC1, 0xD1, 0xE1, 0xF1
+  ]
+  LookupLo = [
+      0x00, 0x21, 0x42, 0x63, 0x84, 0xA5, 0xC6, 0xE7,
+      0x08, 0x29, 0x4A, 0x6B, 0x8C, 0xAD, 0xCE, 0xEF
+  ]
+  attr_reader :crcHi, :crcLo
 
-def buildCrc bytes
-  crc = 0xFFFF
-  bytes.each do |byte|
-    crc = buildCrcNibble crc, byte >> 4
-    crc = buildCrcNibble crc, byte & 0x0F
+  def initialize bytes = []
+    @crcHi = 0xFF
+    @crcLo = 0xFF
+    addBytes bytes
   end
-  crc
+
+  def addBytes bytes
+    bytes.each do |byte|
+      addNibble byte >> 4
+      addNibble byte & 0x0F
+    end
+  end
+
+  private
+
+  def addNibble nibble
+    t = ((@crcHi >> 4) ^ nibble) & 0x0F
+    @crcHi = (((@crcHi << 4) & 0xFF) | (@crcLo >> 4)) ^ LookupHi[t]
+    @crcLo = ((@crcLo << 4) & 0xFF) ^ LookupLo[t]
+  end
+
 end
 
-def makeReadCommand slaveAddress = 0x01, masterAddress = 0x81
-  command = [slaveAddress, 0x0A, masterAddress, 0x00, 0x00, 0x00, 0xFF, 0xFF]
-  crc = buildCrc command
-  command << (crc & 0xFF)
-  command << (crc >> 8)
+def makeReadCommand pin, address = 0x93
+  command = [address, 0x0B, 0x00, pin & 0xFF, pin >> 8, 0x00, 0x00, 0xFF, 0xFF]
+  crc = CRC.new command
+  command << crc.crcLo
+  command << crc.crcHi
+  puts command
   command.pack 'c*'
 end
 
-cmd = makeReadCommand
-TCPSocket.open('192.168.2.61', 8068) do |socket|
-  socket.write cmd
-  reply = socket.read 3
-  reply.unpack('c*').each { |byte| puts byte }
+def doComms pin
+  cmd = makeReadCommand pin
+  TCPSocket.open('192.168.2.61', 8068) do |socket|
+    socket.write cmd
+    reply = socket.read 81
+    puts reply.unpack('c*')
+  end
 end
+
+doComms 4792
